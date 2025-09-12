@@ -3,6 +3,9 @@ import os
 import socket
 import threading
 import math
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
+from cryptography.hazmat.primitives import serialization, hashes
+from cryptography.hazmat.backends import default_backend
 
 version = "0.1"
 
@@ -17,6 +20,15 @@ with open(settings_path, "r", encoding="utf-8") as file:
     timeout_seconds = data.get("timeout_seconds")
     CHUNK_SIZE = data.get("chunk_size_bytes")
 
+    #RSA keys
+
+
+    private_key = data.get("keys").get("private_key").encode()
+    public_key = data.get("keys").get("public_key").encode()
+
+
+    #file size limit
+
     if data.get("max_file_size_mb").get("gigabytes") != 0:
         fileSize = data.get("max_file_size_mb").get("gigabytes") * 1024 * 1024 * 1024
     elif data.get("max_file_size_mb").get("megabytes") != 0:
@@ -30,8 +42,95 @@ with open(settings_path, "r", encoding="utf-8") as file:
         exit()
     print (f"Max file size set to {fileSize} bytes")
 
-client_id_to_take = []
-client_to_write = []
+
+def RSA_encrypt(public_key, message):
+    public_key = serialization.load_pem_public_key(
+        public_key,
+        backend=default_backend()
+    )
+    encrypted = public_key.encrypt(
+        message,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return encrypted
+
+def RSA_decrypt(private_key, encrypted_message):
+    private_key = serialization.load_pem_private_key(
+        private_key,
+        password=None,
+        backend=default_backend()
+    )
+    original_message = private_key.decrypt(
+        encrypted_message,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return original_message
+
+
+
+p2p_clients = {}
+
+
+def write_to_server(public_key, conn, data):
+    print("ok")
+
+
+
+
+
+
+
+
+#methods
+
+
+
+
+def p2p(conn, addr, client_public_key):
+    data = conn.recv(1024)
+    print(RSA_decrypt(private_key, data).decode())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def handle_client(conn, addr):
     print('connected:', addr) if debug_message else None
@@ -50,24 +149,15 @@ def handle_client(conn, addr):
                 conn.close()
                 exit()
             else:
+                #metod
                 data = conn.recv(1024)
-                #client_id_to_take.append(conn)
-                if data.decode() == "write":
-                    try:
-                        conn.send(str(fileSize).encode())
-                        data = conn.recv(1024).decode()
-
-                        if int(data) <= fileSize:
-                            with open(os.path.join(script_dir, str(addr)), "w", encoding="utf-8") as f:
-                                data = conn.recv(fileSize)
-                                f.write(data.decode())
-                                client_to_write.append(str(addr))
+                if data.decode() == "p2p":
+                    conn.send(public_key)
+                    client_public_key = conn.recv(1024).decode()
+                    conn.settimeout(None)
+                    threading.Thread(target=p2p, args=(conn, addr, client_public_key), daemon=True).start()
 
 
-                    finally:
-                        #client_id_to_take.remove(conn)
-                        print(f"Client disconnected {addr}") if debug_message else None
-                        conn.close()
                     
         except UnicodeError:
             print(f"Received invalid data {addr}") if debug_message else None
@@ -79,7 +169,6 @@ def handle_client(conn, addr):
         conn.close()
 
 
-    conn.close()
 
 sock = socket.socket()
 sock.bind(('', 9090))

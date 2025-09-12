@@ -3,6 +3,13 @@
     "client_queue_size": 10,
     "timeout_seconds": 10,
 
+
+    "keys" : {
+        "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCULZKx3NxcH28U\nrM/irehjmTycZ5RjlBdOcVQvEkEb7OdRX9YjqB9j3YgtzNMKAKYH/ftPm7EUZBeA\nPYQMzZib/CoF1ofCZCKpiAw3jkOcJSnDgh3SDRyF+fDlo81c+rPd0saffyHnyzDh\n+u3RBLLa6vsztruiBtwsDEkf07ZcI0tRseeR7O+Ke+9UerVyCmy46oW7/JAa/ele\ntJ3chhBxE6Q2oJR9rtbhKz7AZ4xgs/xowHnfLd/rTdu0FBNp+OzCW47P76Vm029N\nKJ9ijdDJ6vfzI0Uq60kkAiXF9xyaVea0c+czavnUViuE4LwU85mXYWJp9+tJowh/\nZtBRlWWnAgMBAAECggEASS9DCz7SxVsvIU6C9GnBY+PMyFDuPMppQnB9zCvfZXv5\n+bp0SLMiIdBKEJjfyMpuNndOVtDGQpR2+PspC6vFypDebni5H50Wc5YCtrO4l9fR\nC0NqGBMquc8rGDhxVxFpoc8XE7KWW+YC9DHboIcKEU7KmA2SGaH6v3Sn7yTBJjr1\nctJZSQ3fV6zG0Q1zv0B+foMDncY8zCQEi3I/fZ5+6G9XcPvA1yuz9rGWnICyvWPa\nVNY981QjtpNKNZ3OH27O5zfC5yZ2Y4ceHB7I3VYG+1jeRDlly9Qy1VnAcqbi9F0P\nqe3frTQZ3mvr2NfBDGsEoPgCXPGUqtlHQYpFe+cEWQKBgQDRfu03iJAv17by0O4C\nAwwqP1gaaCDf+gk7uPDb7DIgZ9yVncuTSc7ckvwgvaphlPXx9q4NONhch/Sus7yx\n3gcI+JBR5WtWOhXz1ib4ehUJlwqtoIHfD4sm4jUe9jmCYpvjXWmpbxhN8LMqotV+\nEag5MDaBnFJv1mjjeZRHVRbD6QKBgQC1Eh/VS9jwhAnlm2WXxkIj1/T8tglnrA4w\n54BXp9/UmbmWPYmtc6HiPEQW2zo6pATgFXpIOYGsIRNTbHLDiEqgEWFWJXB7NjQB\nG6S12+S8gsTxvv1EzPhvRxdePc94xtqySxrqmZjDgk+pOe5YCSuVE5fB9nwN7YoA\nDMo6AaSzDwKBgQDKlbIxZJcCHNjmoFG4klfeNtks2AsKbFEndqU8FoE2wxkVeb0W\nFma6+ExmIOM1cAYR0Rjo4lKf0D01/8t2OR2WeD+fYnpUrODzpeCTogLb/jquQiu0\nl+RZWqBB65sbUd4rlPaLiUn4fM3VaheHzO1fOBdNaOxzB+TwLG7OOCNGmQKBgDlJ\nGKUkr+e3/mGT/lo8MSSh6DIjbWpNNtgmBaa1x8y9LcfohCxKDwdCRdBtX0i6J4i1\ngtBi0TGh7TlRcCWIcwOdPAxDIAj7JwzKsBuRDBbP0HsjD4G6z0Z1WWFJcOAnGX2a\n4VMjcP85tPY3C77yd8VcQ4Dr+Gd3pVdKtJgReQflAoGAfk4CaHvaxv9mIFac4rKQ\nmjavHBLnvGMUvX60haFNlAwXV/prg5IthqcdQ3028KW9S9bknpDzal/GbVdQh6FM\nARFIcyz5805X5TY7VVXbttHb8mkOFcuuP+gDBo1IdbkP5jA5r9eSeD3wfDZBAVPC\n7+jQrAzLX1U8fXrATRiuPPA=\n-----END PRIVATE KEY-----\n",
+        "public_key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlC2SsdzcXB9vFKzP4q3o\nY5k8nGeUY5QXTnFULxJBG+znUV/WI6gfY92ILczTCgCmB/37T5uxFGQXgD2EDM2Y\nm/wqBdaHwmQiqYgMN45DnCUpw4Id0g0chfnw5aPNXPqz3dLGn38h58sw4frt0QSy\n2ur7M7a7ogbcLAxJH9O2XCNLUbHnkezvinvvVHq1cgpsuOqFu/yQGv3pXrSd3IYQ\ncROkNqCUfa7W4Ss+wGeMYLP8aMB53y3f603btBQTafjswluOz++lZtNvTSifYo3Q\nyer38yNFKutJJAIlxfccmlXmtHPnM2r51FYrhOC8FPOZl2FiaffrSaMIf2bQUZVl\npwIDAQAB\n-----END PUBLIC KEY-----\n"
+    },
+
+
     "chunk_size_bytes": 4096,
     "max_file_size_mb": {
         "bytes": 0,
