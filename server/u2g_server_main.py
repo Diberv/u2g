@@ -75,30 +75,32 @@ def RSA_decrypt(private_key, encrypted_message):
     return original_message
 
 
-
 p2p_clients = {}
+waiting_clients = []  # client_id
+connected_pairs = {}  # client_id -> peer_client_id
+thread_events = {}
 
 
 def write_to_client_RSA(public_key, conn, data):
-    #try:
     try:
+        try:
+            
+            text = RSA_encrypt(public_key, data.encode())
         
-        text = RSA_encrypt(public_key, data.encode())
-    
-        conn.send(text)
-    except (BrokenPipeError, ConnectionResetError) as e:
-        print(f"disconnected, Exeption: {e}") if debug_message else None
-        return None
+            conn.send(text)
+        except (BrokenPipeError, ConnectionResetError) as e:
+            print(f"disconnected, Exeption: {e}") if debug_message else None
+            return None
 
-    #except Exception as e:
-        #print(f"exeption_write: {e}") if debug_message else None
+    except Exception as e:
+        print(f"exeption_write: {e}") if debug_message else None
 
 
 def read_to_client_RSA(private_key, conn):
     try:
         data = conn.recv(256)
         if not data:
-            print('disconnected:', addr) if debug_message else None
+            print('disconnected') if debug_message else None
             return None
         text = RSA_decrypt(private_key, data)
         return text.decode()
@@ -116,10 +118,46 @@ def read_to_client_RSA(private_key, conn):
 
 
 def p2p(conn, addr, client_public_key):
-    client_id = read_to_client_RSA(private_key, conn)
-    p2p_clients[client_id] = conn
-    #print(p2p_clients)
-    write_to_client_RSA(client_public_key, conn, "ok")
+    try:
+        client_id = read_to_client_RSA(private_key, conn)
+        if client_id in p2p_clients:
+            conn.close()
+        else:
+            p2p_clients[client_id] = conn
+            #print(p2p_clients)
+            write_to_client_RSA(client_public_key, conn, "ok")
+            data = read_to_client_RSA(private_key, conn)
+
+            if data == "create":
+                waiting_clients.append(client_id)
+                thread_events[client_id] = threading.Event()
+                thread_events[client_id].wait()
+                peer_client_id = connected_pairs[client_id]
+
+                while True:
+                    data = conn.recv(4096)
+                    p2p_clients[peer_client_id].send(data)
+
+            if data == "join":
+                peer_client_id = read_to_client_RSA(private_key, conn)
+                if peer_client_id in waiting_clients:
+                    connected_pairs[client_id] = peer_client_id
+                    connected_pairs[peer_client_id] = client_id
+                    waiting_clients.remove(peer_client_id)
+                    thread_events[peer_client_id].set()
+
+                    while True:
+                        data = conn.recv(4096)
+                        p2p_clients[peer_client_id].send(data)
+
+
+                else:
+                    conn.close()
+
+
+    except Exception as e:
+        print(f"exeption_read: {e}") if debug_message else None
+        
 
 
 
