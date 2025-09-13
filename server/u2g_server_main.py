@@ -79,10 +79,31 @@ def RSA_decrypt(private_key, encrypted_message):
 p2p_clients = {}
 
 
-def write_to_server(public_key, conn, data):
-    print("ok")
+def write_to_client_RSA(public_key, conn, data):
+    #try:
+    try:
+        
+        text = RSA_encrypt(public_key, data.encode())
+    
+        conn.send(text)
+    except (BrokenPipeError, ConnectionResetError) as e:
+        print(f"disconnected, Exeption: {e}") if debug_message else None
+        return None
+
+    #except Exception as e:
+        #print(f"exeption_write: {e}") if debug_message else None
 
 
+def read_to_client_RSA(private_key, conn):
+    try:
+        data = conn.recv(256)
+        if not data:
+            print('disconnected:', addr) if debug_message else None
+            return None
+        text = RSA_decrypt(private_key, data)
+        return text.decode()
+    except Exception as e:
+        print(f"exeption_read: {e}") if debug_message else None
 
 
 
@@ -95,8 +116,11 @@ def write_to_server(public_key, conn, data):
 
 
 def p2p(conn, addr, client_public_key):
-    data = conn.recv(1024)
-    print(RSA_decrypt(private_key, data).decode())
+    client_id = read_to_client_RSA(private_key, conn)
+    p2p_clients[client_id] = conn
+    #print(p2p_clients)
+    write_to_client_RSA(client_public_key, conn, "ok")
+
 
 
 
@@ -153,7 +177,7 @@ def handle_client(conn, addr):
                 data = conn.recv(1024)
                 if data.decode() == "p2p":
                     conn.send(public_key)
-                    client_public_key = conn.recv(1024).decode()
+                    client_public_key = conn.recv(2048)
                     conn.settimeout(None)
                     threading.Thread(target=p2p, args=(conn, addr, client_public_key), daemon=True).start()
 
