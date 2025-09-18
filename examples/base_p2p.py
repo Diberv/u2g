@@ -31,9 +31,9 @@ if mode == "join":
 
     code = input("code: ") #введите код для подключения  |  enter connection code
 
-    u2g.start(ip, port) #запуск  |  start
+    u2g.join = code #подключение к пользователю  |  connection to user
 
-    u2g.join(code) #подключение к пользователю  |  connection to user
+    u2g.start(ip, port) #запуск  |  start
 
     text = input("message: ") #сообщение  |  message
 

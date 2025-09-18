@@ -130,8 +130,7 @@ def p2p_read(sock):
 def p2p(mode, sock, server_public_key):
     if mode == "create":
         threading.Thread(target=p2p_read, daemon=True, args=(sock,)).start()
-        while True:
-            sock.send(input().encode())
+        threading.Thread(target=p2p_write, args=(sock, client_public_key), daemon=True).start()
 
     if mode == "join":
         write_to_client_RSA(server_public_key, sock, input("id: "))
@@ -142,7 +141,7 @@ def p2p(mode, sock, server_public_key):
 
 
 
-
+join = ""
 
 
 def start(ip, port):
@@ -169,8 +168,11 @@ def start(ip, port):
 
         if method == "p2p":
             if p2p_mode != "":
-                write_to_client_RSA(server_public_key, sock, p2p_mode)
-                p2p(p2p_mode, sock, server_public_key)
+                if join != "":
+                    write_to_client_RSA(server_public_key, sock, p2p_mode)
+                    p2p(p2p_mode, sock, server_public_key)
+                else:
+                    raise ValueError("you didn't select a join code")
             else:
                 raise ValueError("you didn't select a mode")
             

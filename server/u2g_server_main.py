@@ -164,36 +164,6 @@ def p2p(conn, addr, client_public_key):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def handle_client(conn, addr):
     print('connected:', addr) if debug_message else None
     try:
