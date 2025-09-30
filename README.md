@@ -40,11 +40,6 @@ This system ensures secure communication between clients, even when the server r
 Before running, you must install dependencies and set up the environment.  
 u2g will not work otherwise.
 
-# 📡 Secure P2P Communication
-
-This project implements a prototype of **peer-to-peer (P2P) data exchange** using **RSA encryption**.  
-It allows two users to establish a connection via a server, perform a version handshake, exchange keys, and send encrypted messages.
-
 ---
 
 ## 🚀 Features
